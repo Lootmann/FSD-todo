@@ -1,5 +1,5 @@
-APP_CONTAINER_NAME=fastapi-template
-DB_CONTAINER_NAME=postgres-template
+APP_CONTAINER_NAME=fastapi-app
+DB_CONTAINER_NAME=fastapi-db
 
 run:
 	docker compose up -d
