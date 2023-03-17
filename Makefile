@@ -1,5 +1,5 @@
-APP_CONTAINER_NAME=fastapi-app
-DB_CONTAINER_NAME=fastapi-db
+APP_CONTAINER_NAME=app
+DB_CONTAINER_NAME=db
 
 run:
 	docker compose up -d
