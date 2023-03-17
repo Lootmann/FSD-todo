@@ -13,7 +13,9 @@ httptools==0.5.0
 httpx==0.23.3
 idna==3.4
 iniconfig==2.0.0
+jose==1.0.0
 packaging==23.0
+passlib==1.7.4
 pluggy==1.0.0
 psycopg2-binary==2.9.5
 pydantic==1.10.6
