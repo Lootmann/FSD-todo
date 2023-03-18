@@ -20,14 +20,19 @@ class TestGETUser:
 class TestPOSTUser:
     def test_create_user(self, client: TestClient):
         resp = client.post(
-            "/users", json={"name": random_string(), "password": random_string()}
+            "/users",
+            json={"name": random_string(), "password": random_string(min_=8, max_=100)},
         )
         assert resp.status_code == status.HTTP_201_CREATED
 
     def test_create_many_users(self, client: TestClient, login_fixture):
         for _ in range(9):
             resp = client.post(
-                "/users", json={"name": random_string(), "password": random_string()}
+                "/users",
+                json={
+                    "name": random_string(),
+                    "password": random_string(min_=8, max_=100),
+                },
             )
             assert resp.status_code == status.HTTP_201_CREATED
 

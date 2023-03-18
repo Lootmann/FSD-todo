@@ -39,7 +39,9 @@ def client_fixture(session: Session):
 
 @pytest.fixture(name="login_fixture")
 def login_fixture(client: TestClient) -> Tuple[user_model.User, dict]:
-    user = user_model.User(name=random_string(), password=random_string())
+    user = user_model.User(
+        name=random_string(), password=random_string(min_=8, max_=100)
+    )
     client.post("/users", json={"name": user.name, "password": user.password})
 
     resp = client.post(

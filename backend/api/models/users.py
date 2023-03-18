@@ -4,16 +4,17 @@ from sqlmodel import Field, SQLModel
 
 
 class UserBase(SQLModel):
-    name: str = Field(index=True)
+    name: str = Field(index=True, min_length=5, max_length=100)
 
 
 class User(UserBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    password: str
+    # NOTE: good password length is longer than 14!
+    password: str = Field(min_length=8, max_length=100)
 
 
 class UserCreate(UserBase):
-    password: str
+    password: str = Field(min_length=8, max_length=100)
 
 
 class UserRead(UserBase):
@@ -21,5 +22,4 @@ class UserRead(UserBase):
 
 
 class UserUpdate(UserBase):
-    name: str
-    password: str
+    password: str = Field(default=None, min_length=8, max_length=100)
