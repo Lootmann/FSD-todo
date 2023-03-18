@@ -30,7 +30,8 @@ def login_user(
 
     if not found_user:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="User Not Found"
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="username or password is wrong",
         )
 
     access_token_expires = timedelta(minutes=credential.access_token_expire_minutes)
