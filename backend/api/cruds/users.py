@@ -37,3 +37,8 @@ def update_user(db: Session, origin: user_model.User, user: user_model.UserUpdat
     db.refresh(origin)
     return origin
 
+
+def delete_user(db: Session, origin: user_model.User) -> None:
+    db.delete(origin)
+    db.commit()
+    return

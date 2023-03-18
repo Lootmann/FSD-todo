@@ -8,14 +8,17 @@ from tests.factory import UserFactory, random_string
 
 
 class TestGETUser:
-    def test_get_all_user(self, client: TestClient, login_fixture):
+    def test_get_all_users(self, client: TestClient, login_fixture):
         _, headers = login_fixture
         resp = client.get("/users", headers=headers)
         assert resp.status_code == status.HTTP_200_OK
 
     def test_get_all_user_without_authenticated(self, client: TestClient):
         resp = client.get("/users")
+        data = resp.json()
+
         assert resp.status_code == status.HTTP_401_UNAUTHORIZED
+        assert data == {"detail": "Not authenticated"}
 
 
 class TestPOSTUser:
@@ -75,3 +78,14 @@ class TestPatchUser:
 
         update_user = session.get(user_model.User, user.id)
         assert auth_api.verify_password("updated :^)", update_user.password) is True
+
+
+class TestDeleteUser:
+    def test_delete_user(self, client: TestClient, login_fixture):
+        user, headers = login_fixture
+
+        resp = client.delete("/users", headers=headers)
+        data = resp.json()
+
+        assert resp.status_code == status.HTTP_200_OK
+        assert data is None

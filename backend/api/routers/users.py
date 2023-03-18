@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
 from sqlmodel import Session
 
 from api.cruds import auths as auth_api
@@ -19,13 +19,8 @@ router = APIRouter(tags=["users"], prefix="/users")
 def get_all_users(
     *,
     db: Session = Depends(get_db),
-    current_user=Depends(auth_api.get_current_active_user),
+    _=Depends(auth_api.get_current_active_user),
 ):
-    if not current_user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Not Authenticated",
-        )
     return user_api.get_all_users(db)
 
 
@@ -53,10 +48,13 @@ def update_user(
     user: user_model.UserUpdate,
     current_user=Depends(auth_api.get_current_active_user),
 ):
-    if not current_user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Not Authenticated",
-        )
     return user_api.update_user(db, current_user, user)
 
+
+@router.delete("", response_model=None, status_code=status.HTTP_200_OK)
+def delete_user(
+    *,
+    db: Session = Depends(get_db),
+    current_user=Depends(auth_api.get_current_active_user),
+):
+    return user_api.delete_user(db, current_user)
