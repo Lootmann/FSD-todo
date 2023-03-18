@@ -2,7 +2,8 @@ from fastapi import status
 from fastapi.testclient import TestClient
 from sqlmodel import Session
 
-from api.cruds.auths import verify_password
+from api.cruds import auths as auth_api
+from api.models import users as user_model
 from tests.factory import UserFactory, random_string
 
 
@@ -49,4 +50,28 @@ class TestPOSTUser:
         user = UserFactory.create_user(session, name=name, password=password)
 
         assert user.name == name
-        assert verify_password(password, user.password) is True
+        assert auth_api.verify_password(password, user.password) is True
+
+
+class TestPatchUser:
+    def test_update_user_only_with_name(self, client: TestClient, login_fixture):
+        user, headers = login_fixture
+        user_data = {"name": "updated :^)"}
+
+        resp = client.patch("/users", json=user_data, headers=headers)
+        data = resp.json()
+
+        assert resp.status_code == status.HTTP_200_OK
+        assert data["name"] == "updated :^)"
+
+    def test_update_user_only_with_password(
+        self, client: TestClient, session: Session, login_fixture
+    ):
+        user, headers = login_fixture
+        user_data = {"password": "updated :^)"}
+
+        resp = client.patch("/users", json=user_data, headers=headers)
+        assert resp.status_code == status.HTTP_200_OK
+
+        update_user = session.get(user_model.User, user.id)
+        assert auth_api.verify_password("updated :^)", update_user.password) is True

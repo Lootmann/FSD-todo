@@ -23,3 +23,17 @@ def create_user(db: Session, user_body: user_model.UserCreate) -> user_model.Use
     db.commit()
     db.refresh(user)
     return user
+
+
+def update_user(db: Session, origin: user_model.User, user: user_model.UserUpdate):
+    user_data = user.dict(exclude_unset=True)
+    for key, value in user_data.items():
+        if key == "password":
+            setattr(origin, key, auth_api.get_hashed_password(value))
+        else:
+            setattr(origin, key, value)
+    db.add(origin)
+    db.commit()
+    db.refresh(origin)
+    return origin
+

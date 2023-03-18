@@ -40,3 +40,23 @@ def create_user(
     user: user_model.UserCreate,
 ):
     return user_api.create_user(db, user)
+
+
+@router.patch(
+    "",
+    response_model=user_model.UserRead,
+    status_code=status.HTTP_200_OK,
+)
+def update_user(
+    *,
+    db: Session = Depends(get_db),
+    user: user_model.UserUpdate,
+    current_user=Depends(auth_api.get_current_active_user),
+):
+    if not current_user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not Authenticated",
+        )
+    return user_api.update_user(db, current_user, user)
+
