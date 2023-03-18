@@ -79,6 +79,20 @@ class TestPatchUser:
         update_user = session.get(user_model.User, user.id)
         assert auth_api.verify_password("updated :^)", update_user.password) is True
 
+    def test_update_user_with_short_name(self, client: TestClient, login_fixture):
+        user, headers = login_fixture
+        user_data = {"name": "1"}
+
+        resp = client.patch("/users", json=user_data, headers=headers)
+        assert resp.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+    def test_update_user_with_short_password(self, client: TestClient, login_fixture):
+        user, headers = login_fixture
+        user_data = {"password": ":^)"}
+
+        resp = client.patch("/users", json=user_data, headers=headers)
+        assert resp.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
 
 class TestDeleteUser:
     def test_delete_user(self, client: TestClient, login_fixture):
