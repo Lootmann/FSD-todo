@@ -19,7 +19,7 @@ router = APIRouter(tags=["users"], prefix="/users")
 def get_all_users(
     *,
     db: Session = Depends(get_db),
-    _=Depends(auth_api.get_current_active_user),
+    _=Depends(auth_api.get_current_user),
 ):
     return user_api.get_all_users(db)
 
@@ -46,7 +46,7 @@ def update_user(
     *,
     db: Session = Depends(get_db),
     user: user_model.UserUpdate,
-    current_user=Depends(auth_api.get_current_active_user),
+    current_user=Depends(auth_api.get_current_user),
 ):
     return user_api.update_user(db, current_user, user)
 
@@ -55,6 +55,6 @@ def update_user(
 def delete_user(
     *,
     db: Session = Depends(get_db),
-    current_user=Depends(auth_api.get_current_active_user),
+    current_user=Depends(auth_api.get_current_user),
 ):
     return user_api.delete_user(db, current_user)

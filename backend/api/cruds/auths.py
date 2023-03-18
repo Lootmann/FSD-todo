@@ -56,13 +56,6 @@ def get_current_user(
     return user
 
 
-def get_current_active_user(
-    current_user: user_model.User = Depends(get_current_user),
-):
-    # TODO: definition active user
-    return current_user
-
-
 def create_access_token(data: dict, expired_delta: timedelta | None = None):
     if expired_delta:
         expire = datetime.utcnow() + expired_delta
