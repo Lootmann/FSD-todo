@@ -5,6 +5,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy.pool import StaticPool
 from sqlmodel import Session, SQLModel, create_engine
 
+from api.cruds import auths as auth_api
 from api.db import get_db
 from api.main import app
 from api.models import auths as auth_model
@@ -38,15 +39,20 @@ def client_fixture(session: Session):
 
 
 @pytest.fixture(name="login_fixture")
-def login_fixture(client: TestClient) -> Tuple[user_model.User, dict]:
+def login_fixture(client: TestClient, session: Session) -> Tuple[user_model.User, dict]:
+    username, password = random_string(), random_string(min_=8, max_=100)
+
     user = user_model.User(
-        name=random_string(), password=random_string(min_=8, max_=100)
+        name=username,
+        password=auth_api.get_hashed_password(password),
     )
-    client.post("/users", json={"name": user.name, "password": user.password})
+    session.add(user)
+    session.commit()
+    session.refresh(user)
 
     resp = client.post(
         "/auth/token",
-        data={"username": user.name, "password": user.password},
+        data={"username": username, "password": password},
         headers={"content-type": "application/x-www-form-urlencoded"},
     )
 
