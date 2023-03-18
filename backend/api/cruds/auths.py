@@ -75,14 +75,3 @@ def create_access_token(data: dict, expired_delta: timedelta | None = None):
     )
 
     return encoded_jwt
-
-
-def authenticate_user(
-    db: Session, username: str, password: str
-) -> user_model.User | None:
-    user = user_api.find_by_name(db, username)
-
-    if not user or not verify_password(plain=password, hashed=user.password):
-        return None
-
-    return user

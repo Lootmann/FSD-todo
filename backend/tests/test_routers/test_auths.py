@@ -16,6 +16,23 @@ class TestAuth:
         )
         data = resp.json()
 
+        assert resp.status_code == status.HTTP_404_NOT_FOUND
+        assert data == {"detail": "User Not Found"}
+
+    def test_get_auth_token_with_incorrect_password(
+        self, client: TestClient, session: Session
+    ):
+        username, password = random_string(), random_string(min_=8, max_=8)
+        user_data = user_model.UserCreate(name=username, password=password)
+        user_api.create_user(session, user_data)
+
+        resp = client.post(
+            "/auth/token",
+            data={"username": username, "password": "mogege"},
+            headers={"content-type": "application/x-www-form-urlencoded"},
+        )
+        data = resp.json()
+
         assert resp.status_code == status.HTTP_401_UNAUTHORIZED
         assert data == {"detail": "username or password is wrong"}
 
