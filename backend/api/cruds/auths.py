@@ -82,10 +82,7 @@ def authenticate_user(
 ) -> user_model.User | None:
     user = user_api.find_by_name(db, username)
 
-    if not user:
-        return None
-
-    if not verify_password(plain=password, hashed=user.password):
+    if not user or not verify_password(plain=password, hashed=user.password):
         return None
 
     return user
