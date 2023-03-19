@@ -31,4 +31,4 @@ python_functions = ["test"]
 
 [tool.coverage.run]
 concurrency = ["multiprocessing", "greenlet", "thread"]
-omit = ["tests/*", "venv", "api/db.py"]
+omit = ["tests/*", "venv", "**/__init__.py", "api/db.py"]
