@@ -1,10 +1,11 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
 from sqlmodel import Session
 
 from api.cruds import auths as auth_api
 from api.cruds import tasks as task_api
+from api.cruds.custom_exceptions import TaskException
 from api.db import get_db
 from api.models import tasks as task_model
 
@@ -38,10 +39,7 @@ def get_task_by_id(
     # TODO: when difference user try to get this task, what is the correct status_code?
     task = task_api.find_by_id(db, task_id, current_user.id)
     if not task:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Task {task_id}: Not Found",
-        )
+        raise TaskException.raise404(task_id)
     return task
 
 
@@ -73,10 +71,7 @@ def update_task(
 ):
     origin = task_api.find_by_id(db, task_id, current_user.id)
     if not origin:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Task {task_id}: Not Found",
-        )
+        raise TaskException.raise404(task_id)
     return task_api.update_task(db, origin, task)
 
 
@@ -93,10 +88,7 @@ def done_task(
 ):
     task = task_api.find_by_id(db, task_id, current_user.id)
     if not task:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Task {task_id}: Not Found",
-        )
+        raise TaskException.raise404(task_id)
     return task_api.done_task(db, task)
 
 
@@ -114,10 +106,7 @@ def undone_task(
     # TODO: duplicate? or toggle_done?
     task = task_api.find_by_id(db, task_id, current_user.id)
     if not task:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Task {task_id}: Not Found",
-        )
+        raise TaskException.raise404(task_id)
     return task_api.undone_task(db, task)
 
 
@@ -130,8 +119,5 @@ def delete_task(
 ):
     task = task_api.find_by_id(db, task_id, current_user.id)
     if not task:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Task {task_id}: Not Found",
-        )
+        raise TaskException.raise404(task_id)
     return task_api.delete_task(db, task)
