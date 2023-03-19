@@ -99,6 +99,13 @@ class TestPostTask:
         data = resp.json()
         assert data["is_done"] is True
 
+    def test_done_task_with_wrong_id(self, client: TestClient, login_fixture):
+        _, headers = login_fixture
+        resp = client.post("/tasks/321/done", headers=headers)
+        data = resp.json()
+        assert resp.status_code == status.HTTP_404_NOT_FOUND
+        assert data == {"detail": "Task 321: Not Found"}
+
     def test_undone_task(self, client: TestClient, session: Session, login_fixture):
         user, headers = login_fixture
         task = TaskFactory.create_task(session, user.id)
@@ -110,3 +117,12 @@ class TestPostTask:
         resp = client.post(f"/tasks/{task.id}/undone", headers=headers)
         data = resp.json()
         assert data["is_done"] is False
+
+    def test_undone_task_with_wrong_id(self, client: TestClient, login_fixture):
+        _, headers = login_fixture
+        resp = client.post("/tasks/321/undone", headers=headers)
+        data = resp.json()
+        assert resp.status_code == status.HTTP_404_NOT_FOUND
+        assert data == {"detail": "Task 321: Not Found"}
+
+
