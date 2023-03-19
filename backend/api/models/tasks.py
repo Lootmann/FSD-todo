@@ -8,6 +8,7 @@ if TYPE_CHECKING:
 
 
 class TaskBase(SQLModel):
+    comment: str = Field(default="")
     priority: int = Field(default=0)
     created_at: datetime.date = Field(default=datetime.date)
     updated_at: datetime.date = Field(default=datetime.date)
