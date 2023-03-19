@@ -1,38 +1,53 @@
 services:
-  app:
-    container_name: fastapi-app
+  backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    working_dir: /usr/code/
     command: python3.10 -m uvicorn api.main:app --reload --host 0.0.0.0 --port 8888
+    container_name: fastapi-app
+    depends_on:
+      db:
+        condition: service_started
+    ports:
+      - published: 8888
+        target: 8888
     volumes:
       - type: bind
         source: ./backend
         target: /usr/code/
+    working_dir: /usr/code/
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    command: npm run dev
+    container_name: frontend-react
+    volumes:
+      - type: bind
+        source: ./frontend
+        target: /usr/frontend
     ports:
-      - target: 8888
-        published: 8888
-    depends_on:
-      db:
-        condition: service_started
+      - published: 3000
+        target: 3000
+    tty: true
 
   db:
-    container_name: postgres-db
     build:
       context: ./db
       dockerfile: Dockerfile
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+    ports:
+      - published: 5432
+        target: 5432
     volumes:
       - type: volume
         source: postgres-volume
         target: /var/lib/postgresql/data
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-    ports:
-      - target: 5432
-        published: 5432
 
 volumes:
   postgres-volume:
