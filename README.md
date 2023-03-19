@@ -8,11 +8,6 @@ SQLModel + Docker Compose を利用した適当なTodoアプリ
 ```python
 class Project:
   id: int
-  sections: List[Section]
-
-
-class Section:
-  id: int
   tasks: List[Task]
 
 
@@ -23,7 +18,10 @@ class Task:
   updated_at: datetime
   expired_at: datetime
   is_done: bool
+
   project: Project
+  user: User
+
 
 class User:
   id: int
