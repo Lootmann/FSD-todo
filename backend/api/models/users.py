@@ -1,6 +1,9 @@
-from typing import Optional
+from typing import TYPE_CHECKING, List, Optional
 
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, Relationship, SQLModel
+
+if TYPE_CHECKING:
+    from api.models.tasks import Task
 
 
 class UserBase(SQLModel):
@@ -11,6 +14,8 @@ class User(UserBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     # NOTE: good password length is longer than 14!
     password: str = Field(min_length=8, max_length=100)
+
+    tasks: List["Task"] = Relationship(back_populates="user")
 
 
 class UserCreate(UserBase):
