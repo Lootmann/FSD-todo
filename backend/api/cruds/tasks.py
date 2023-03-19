@@ -37,6 +37,18 @@ def create_task(
     return db_task
 
 
+def update_task(
+    db: Session, origin: task_model.Task, task: task_model.TaskUpdate
+) -> task_model.Task:
+    task_data = task.dict(exclude_unset=True)
+    for key, value in task_data.items():
+        setattr(origin, key, value)
+    db.add(origin)
+    db.commit()
+    db.refresh(origin)
+    return origin
+
+
 def done_task(db: Session, task: task_model.Task) -> task_model.Task:
     task.is_done = True
     db.add(task)

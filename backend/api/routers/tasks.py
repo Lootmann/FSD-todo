@@ -59,6 +59,27 @@ def create_task(
     return task_api.create_task(db, task, current_user)
 
 
+@router.patch(
+    "/{task_id}",
+    response_model=task_model.TaskRead,
+    status_code=status.HTTP_200_OK,
+)
+def update_task(
+    *,
+    db: Session = Depends(get_db),
+    task_id: int,
+    task: task_model.TaskUpdate,
+    current_user=Depends(auth_api.get_current_user),
+):
+    origin = task_api.find_by_id(db, task_id, current_user.id)
+    if not origin:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Task {task_id}: Not Found",
+        )
+    return task_api.update_task(db, origin, task)
+
+
 @router.post(
     "/{task_id}/done",
     response_model=task_model.TaskRead,

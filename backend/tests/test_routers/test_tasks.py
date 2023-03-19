@@ -126,3 +126,45 @@ class TestPostTask:
         assert data == {"detail": "Task 321: Not Found"}
 
 
+class TestPatchTask:
+    def test_update_task_with_empty_payload(
+        self, client: TestClient, session: Session, login_fixture
+    ):
+        user, headers = login_fixture
+        task = TaskFactory.create_task(session, user.id)
+
+        resp = client.patch(f"/tasks/{task.id}", json={}, headers=headers)
+        assert resp.status_code == status.HTTP_200_OK
+
+    def test_update_task_with_payloads(
+        self, client: TestClient, session: Session, login_fixture
+    ):
+        user, headers = login_fixture
+        task = TaskFactory.create_task(session, user.id)
+
+        resp = client.patch(
+            f"/tasks/{task.id}",
+            json={
+                "comment": "updated :^)",
+                "priority": 3,
+                "expired_at": str(date.today() + timedelta(days=10)),
+            },
+            headers=headers,
+        )
+        data = resp.json()
+
+        assert resp.status_code == status.HTTP_200_OK
+        assert data["comment"] == "updated :^)"
+        assert data["priority"] == 3
+        assert "expired_at" in data
+        assert data["expired_at"] is not None
+
+    def test_update_task_with_wrong_task_id(
+        self, client: TestClient, session: Session, login_fixture
+    ):
+        user, headers = login_fixture
+
+        resp = client.patch("/tasks/123", json={}, headers=headers)
+        data = resp.json()
+        assert resp.status_code == status.HTTP_404_NOT_FOUND
+        assert data == {"detail": "Task 123: Not Found"}
