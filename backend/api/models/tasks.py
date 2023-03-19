@@ -1,4 +1,4 @@
-import datetime
+from datetime import date
 from typing import TYPE_CHECKING, Optional
 
 from sqlmodel import Field, Relationship, SQLModel
@@ -10,9 +10,9 @@ if TYPE_CHECKING:
 class TaskBase(SQLModel):
     comment: str = Field(default="")
     priority: int = Field(default=0)
-    created_at: datetime.date = Field(default=datetime.date)
-    updated_at: datetime.date = Field(default=datetime.date)
-    expired_at: Optional[datetime.date] = Field(default=None)
+    created_at: date = Field(default=date.today())
+    updated_at: date = Field(default=date.today())
+    expired_at: Optional[date] = Field(default=None)
     is_done: bool = Field(default=False)
 
 
