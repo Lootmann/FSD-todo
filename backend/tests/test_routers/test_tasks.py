@@ -168,3 +168,25 @@ class TestPatchTask:
         data = resp.json()
         assert resp.status_code == status.HTTP_404_NOT_FOUND
         assert data == {"detail": "Task 123: Not Found"}
+
+
+class TestDeleteTask:
+    def test_delete_task(self, client: TestClient, login_fixture):
+        user, headers = login_fixture
+
+        resp = client.post("/tasks", json={}, headers=headers)
+        task_id = resp.json()["id"]
+
+        resp = client.get("/tasks", headers=headers)
+        assert len(resp.json()) == 1
+
+        resp = client.delete(f"/tasks/{task_id}", headers=headers)
+        data = resp.json()
+        assert resp.status_code == status.HTTP_200_OK
+        assert data is None
+
+    def test_delete_task_with_wrong_id(self, client: TestClient, login_fixture):
+        user, headers = login_fixture
+
+        resp = client.delete("/tasks/123", headers=headers)
+        assert resp.status_code == status.HTTP_404_NOT_FOUND

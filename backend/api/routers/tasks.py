@@ -119,3 +119,19 @@ def undone_task(
             detail=f"Task {task_id}: Not Found",
         )
     return task_api.undone_task(db, task)
+
+
+@router.delete("/{task_id}", response_model=None, status_code=status.HTTP_200_OK)
+def delete_task(
+    *,
+    db: Session = Depends(get_db),
+    task_id: int,
+    current_user=Depends(auth_api.get_current_user),
+):
+    task = task_api.find_by_id(db, task_id, current_user.id)
+    if not task:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Task {task_id}: Not Found",
+        )
+    return task_api.delete_task(db, task)

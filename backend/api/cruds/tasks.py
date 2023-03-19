@@ -63,3 +63,9 @@ def undone_task(db: Session, task: task_model.Task) -> task_model.Task:
     db.commit()
     db.refresh(task)
     return task
+
+
+def delete_task(db: Session, task: task_model.Task) -> None:
+    db.delete(task)
+    db.commit()
+    return
