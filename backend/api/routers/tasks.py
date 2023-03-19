@@ -13,7 +13,7 @@ router = APIRouter(tags=["tasks"], prefix="/tasks")
 
 @router.get(
     "",
-    response_model=List[task_model.Task],
+    response_model=List[task_model.TaskRead],
     status_code=status.HTTP_200_OK,
 )
 def get_all_tasks(
@@ -57,3 +57,44 @@ def create_task(
     current_user=Depends(auth_api.get_current_user),
 ):
     return task_api.create_task(db, task, current_user)
+
+
+@router.post(
+    "/{task_id}/done",
+    response_model=task_model.TaskRead,
+    status_code=status.HTTP_200_OK,
+)
+def done_task(
+    *,
+    db: Session = Depends(get_db),
+    task_id: int,
+    current_user=Depends(auth_api.get_current_user),
+):
+    task = task_api.find_by_id(db, task_id, current_user.id)
+    if not task:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Task {task_id}: Not Found",
+        )
+    return task_api.done_task(db, task)
+
+
+@router.post(
+    "/{task_id}/undone",
+    response_model=task_model.TaskRead,
+    status_code=status.HTTP_200_OK,
+)
+def undone_task(
+    *,
+    db: Session = Depends(get_db),
+    task_id: int,
+    current_user=Depends(auth_api.get_current_user),
+):
+    # TODO: duplicate? or toggle_done?
+    task = task_api.find_by_id(db, task_id, current_user.id)
+    if not task:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Task {task_id}: Not Found",
+        )
+    return task_api.undone_task(db, task)

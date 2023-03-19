@@ -21,7 +21,9 @@ def find_by_id(db: Session, task_id: int, user_id: int) -> task_model.Task | Non
     return db.exec(stmt).first()
 
 
-def create_task(db: Session, task_create: task_model.TaskCreate, user: user_model.User):
+def create_task(
+    db: Session, task_create: task_model.TaskCreate, user: user_model.User
+) -> task_model.Task:
     task_create.created_at = datetime.now()
     task_create.updated_at = datetime.now()
 
@@ -33,3 +35,19 @@ def create_task(db: Session, task_create: task_model.TaskCreate, user: user_mode
     db.refresh(db_task)
 
     return db_task
+
+
+def done_task(db: Session, task: task_model.Task) -> task_model.Task:
+    task.is_done = True
+    db.add(task)
+    db.commit()
+    db.refresh(task)
+    return task
+
+
+def undone_task(db: Session, task: task_model.Task) -> task_model.Task:
+    task.is_done = False
+    db.add(task)
+    db.commit()
+    db.refresh(task)
+    return task

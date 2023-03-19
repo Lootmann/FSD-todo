@@ -4,7 +4,7 @@ from fastapi import status
 from fastapi.testclient import TestClient
 from sqlmodel import Session
 
-from tests.factory import AuthFactory, UserFactory
+from tests.factory import AuthFactory, TaskFactory, UserFactory
 
 
 class TestGetTask:
@@ -42,7 +42,7 @@ class TestGetTask:
         assert resp.status_code == status.HTTP_404_NOT_FOUND
 
     def test_get_task_with_wrong_user(
-            self, client: TestClient, session: Session, login_fixture
+        self, client: TestClient, session: Session, login_fixture
     ):
         user, headers = login_fixture
         resp = client.post("/tasks", json={"comment": "first task"}, headers=headers)
@@ -86,3 +86,27 @@ class TestPostTask:
         assert resp.status_code == status.HTTP_201_CREATED
         assert data["id"] is not None
         assert data["expired_at"] is not None
+
+    def test_done_task(self, client: TestClient, session: Session, login_fixture):
+        user, headers = login_fixture
+        task = TaskFactory.create_task(session, user.id)
+
+        resp = client.get(f"/tasks/{task.id}", headers=headers)
+        data = resp.json()
+        assert data["is_done"] is False
+
+        resp = client.post(f"/tasks/{task.id}/done", headers=headers)
+        data = resp.json()
+        assert data["is_done"] is True
+
+    def test_undone_task(self, client: TestClient, session: Session, login_fixture):
+        user, headers = login_fixture
+        task = TaskFactory.create_task(session, user.id)
+
+        resp = client.post(f"/tasks/{task.id}/done", headers=headers)
+        data = resp.json()
+        assert data["is_done"] is True
+
+        resp = client.post(f"/tasks/{task.id}/undone", headers=headers)
+        data = resp.json()
+        assert data["is_done"] is False

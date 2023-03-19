@@ -1,3 +1,4 @@
+from datetime import datetime
 from random import randint, sample
 from string import ascii_letters
 
@@ -6,6 +7,7 @@ from sqlmodel import Session
 
 from api.cruds import auths as auth_crud
 from api.models import auths as auth_model
+from api.models import tasks as task_model
 from api.models import users as user_model
 
 
@@ -27,6 +29,24 @@ class UserFactory:
         db.commit()
         db.refresh(user)
         return user
+
+
+class TaskFactory:
+    @staticmethod
+    def create_task(
+        db: Session, user_id: int, comment: str = random_string()
+    ) -> task_model.Task:
+        task = task_model.Task()
+        task.created_at = datetime.now()
+        task.updated_at = datetime.now()
+        task.comment = comment
+        task.user_id = user_id
+
+        db.add(task)
+        db.commit()
+        db.refresh(task)
+
+        return task
 
 
 class AuthFactory:
