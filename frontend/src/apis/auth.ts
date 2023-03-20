@@ -51,6 +51,10 @@ function setAuthToken(data: AuthTokenType) {
     localStorage.setItem(LOCALSTORAGE_KEY, data.access_token);
 }
 
+export function removeAuthToken() {
+  localStorage.removeItem(LOCALSTORAGE_KEY);
+}
+
 export function getAuthToken(): AuthTokenType {
   const token = localStorage.getItem(LOCALSTORAGE_KEY);
   if (token !== null) return { access_token: token, token_type: "bearer" };
