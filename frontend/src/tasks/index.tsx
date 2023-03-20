@@ -1,10 +1,21 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { AddTask } from "./addtask";
 import { API_BACKEND_URL } from "../settings";
 import { getAuthToken, removeAuthToken } from "../apis/auth";
 
 export function Index() {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState<TaskType[]>([]);
+
+  const [refresh, setRefresh] = useState<boolean>(false);
+  function handleRefresh() {
+    setRefresh(!refresh);
+  }
+
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  function handleModal(isOpened: boolean) {
+    setOpenModal(isOpened);
+  }
 
   useEffect(() => {
     const token = getAuthToken();
@@ -33,21 +44,41 @@ export function Index() {
       // NOTE: when token is null, this means that user at least is not logged in.
       window.location.href = "/auth/login";
     }
-  }, []);
+  }, [refresh]);
 
   return (
-    <div className="p-6">
-      {tasks.length > 0 ? (
-        <ul>
-          <li>hoge</li>
-          <li>hoge</li>
-          <li>hoge</li>
-          <li>hoge</li>
-          <li>hoge</li>
-        </ul>
-      ) : (
-        <div>no tasks :^)</div>
-      )}
+    <div className="flex-1 flex flex-col p-6">
+      <div className="flex flex-col mx-72">
+        <div className="my-6">
+          <h2 className="border-b border-zinc-600">hello world</h2>
+        </div>
+
+        <div className="my-6">
+          <h2 className="border-b border-zinc-600">Today</h2>
+
+          <ul className="my-2">
+            {tasks.map((task) => {
+              return (
+                <li key={task.id}>
+                  {task.id}. {task.comment}({task.priority})
+                </li>
+              );
+            })}
+
+            <li className="mt-8 pt-1 rounded-md border-t border-zinc-600">
+              {/* TODO: Add Task */}
+              {openModal ? (
+                <AddTask
+                  handleRefresh={handleRefresh}
+                  handleModal={handleModal}
+                />
+              ) : (
+                <p onClick={() => setOpenModal(true)}>+ add new task</p>
+              )}
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   );
 }
