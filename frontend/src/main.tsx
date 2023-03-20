@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Index as AuthIndex } from "./auths";
-import { Index as TodoIndex } from "./todos";
+import { Index as TaskIndex } from "./tasks";
 import { Index } from ".";
 import { Login } from "./auths/login";
 import { Logout } from "./auths/logout";
@@ -15,8 +15,8 @@ const router = createBrowserRouter([
     element: <Index />,
     children: [
       {
-        path: "/todos",
-        element: <TodoIndex />,
+        path: "/tasks",
+        element: <TaskIndex />,
       },
     ],
   },
