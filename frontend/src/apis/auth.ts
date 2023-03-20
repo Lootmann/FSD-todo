@@ -19,7 +19,7 @@ export function login(params: AuthUserType) {
         setAuthToken(auth_token);
 
         // NOTE: redirect to '/' top page
-        window.location.href = "/";
+        window.location.href = "/todos";
       }
     })
     .catch((error) => {
