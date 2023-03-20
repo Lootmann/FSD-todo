@@ -48,7 +48,7 @@ class TestGetTask:
         resp = client.post("/tasks", json={"comment": "first task"}, headers=headers)
         task_id = resp.json()["id"]
 
-        UserFactory.create_user(session, name="other", password="hogehoge123")
+        UserFactory.create_user(session, username="other", password="hogehoge123")
         other_header = AuthFactory.create_token(client, "other", "hogehoge123")
 
         # get task by a different user

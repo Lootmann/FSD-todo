@@ -23,7 +23,7 @@ class TestAuth:
         self, client: TestClient, session: Session
     ):
         username, password = random_string(), random_string(min_=8, max_=8)
-        user_data = user_model.UserCreate(name=username, password=password)
+        user_data = user_model.UserCreate(username=username, password=password)
         user_api.create_user(session, user_data)
 
         resp = client.post(
@@ -38,7 +38,7 @@ class TestAuth:
 
     def test_get_auth_token_with_user(self, client: TestClient, session: Session):
         username, password = random_string(), random_string(min_=8, max_=8)
-        user_data = user_model.UserCreate(name=username, password=password)
+        user_data = user_model.UserCreate(username=username, password=password)
         user_api.create_user(session, user_data)
 
         resp = client.post(

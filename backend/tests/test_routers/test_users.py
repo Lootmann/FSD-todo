@@ -25,7 +25,10 @@ class TestPOSTUser:
     def test_create_user(self, client: TestClient):
         resp = client.post(
             "/users",
-            json={"name": random_string(), "password": random_string(min_=8, max_=100)},
+            json={
+                "username": random_string(),
+                "password": random_string(min_=8, max_=100),
+            },
         )
         assert resp.status_code == status.HTTP_201_CREATED
 
@@ -34,7 +37,7 @@ class TestPOSTUser:
             resp = client.post(
                 "/users",
                 json={
-                    "name": random_string(),
+                    "username": random_string(),
                     "password": random_string(min_=8, max_=100),
                 },
             )
@@ -49,23 +52,23 @@ class TestPOSTUser:
         assert len(data) == 10
 
     def test_create_user_factory(self, client: TestClient, session: Session):
-        name, password = random_string(), random_string()
-        user = UserFactory.create_user(session, name=name, password=password)
+        username, password = random_string(), random_string()
+        user = UserFactory.create_user(session, username=username, password=password)
 
-        assert user.name == name
+        assert user.username == username
         assert auth_api.verify_password(password, user.password) is True
 
 
 class TestPatchUser:
     def test_update_user_only_with_name(self, client: TestClient, login_fixture):
         user, headers = login_fixture
-        user_data = {"name": "updated :^)"}
+        user_data = {"username": "updated :^)"}
 
         resp = client.patch("/users", json=user_data, headers=headers)
         data = resp.json()
 
         assert resp.status_code == status.HTTP_200_OK
-        assert data["name"] == "updated :^)"
+        assert data["username"] == "updated :^)"
 
     def test_update_user_only_with_password(
         self, client: TestClient, session: Session, login_fixture
@@ -81,7 +84,7 @@ class TestPatchUser:
 
     def test_update_user_with_short_name(self, client: TestClient, login_fixture):
         user, headers = login_fixture
-        user_data = {"name": "1"}
+        user_data = {"username": "1"}
 
         resp = client.patch("/users", json=user_data, headers=headers)
         assert resp.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY

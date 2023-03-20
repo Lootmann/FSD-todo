@@ -43,7 +43,7 @@ def login_fixture(client: TestClient, session: Session) -> Tuple[user_model.User
     username, password = random_string(), random_string(min_=8, max_=100)
 
     user = user_model.User(
-        name=username,
+        username=username,
         password=auth_api.get_hashed_password(password),
     )
     session.add(user)

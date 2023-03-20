@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 
 
 class UserBase(SQLModel):
-    name: str = Field(index=True, min_length=5, max_length=100)
+    username: str = Field(index=True, min_length=5, max_length=100)
 
 
 class User(UserBase, table=True):
@@ -27,5 +27,5 @@ class UserRead(UserBase):
 
 
 class UserUpdate(UserBase):
-    name: Optional[str] = Field(default=None, min_length=5, max_length=100)
+    username: Optional[str] = Field(default=None, min_length=5, max_length=100)
     password: Optional[str] = Field(default=None, min_length=8, max_length=100)

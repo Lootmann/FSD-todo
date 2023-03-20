@@ -20,9 +20,9 @@ def random_string(min_: int = 5, max_: int = 10) -> str:
 
 class UserFactory:
     @staticmethod
-    def create_user(db: Session, name: str, password: str) -> user_model.User:
+    def create_user(db: Session, username: str, password: str) -> user_model.User:
         user = user_model.User(
-            name=name,
+            username=username,
             password=auth_crud.get_hashed_password(password),
         )
         db.add(user)
