@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Index as AuthIndex } from "./auths";
+import { Index as TodoIndex } from "./todos";
 import { Index } from ".";
 import { Login } from "./auths/login";
 import { Signup } from "./auths/signup";
@@ -11,6 +12,12 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Index />,
+    children: [
+      {
+        path: "/todos",
+        element: <TodoIndex />,
+      },
+    ],
   },
   {
     path: "/auth",
