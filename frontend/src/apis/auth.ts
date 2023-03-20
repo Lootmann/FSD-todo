@@ -31,7 +31,10 @@ export function signup(params: AuthUserType) {
   const { username, password } = params;
 
   axios
-    .post(API_BACKEND_URL + "/users", { name: username, password: password })
+    .post(API_BACKEND_URL + "/users", {
+      username: username,
+      password: password,
+    })
     .then((resp) => {
       console.log(resp);
       console.log(resp.data);
