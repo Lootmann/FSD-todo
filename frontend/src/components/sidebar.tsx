@@ -10,7 +10,7 @@ export function Sidebar() {
         <li className="hover:bg-zinc-700 px-1 my-1 rounded-md">hoge</li>
       </ul>
 
-      <div className="my-4">
+      <div className="my-6">
         <h2 className="">Project</h2>
       </div>
     </div>
