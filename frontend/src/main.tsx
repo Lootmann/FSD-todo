@@ -5,6 +5,7 @@ import { Index as AuthIndex } from "./auths";
 import { Index as TodoIndex } from "./todos";
 import { Index } from ".";
 import { Login } from "./auths/login";
+import { Logout } from "./auths/logout";
 import { Signup } from "./auths/signup";
 import "./styles/index.css";
 
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: "/auth/signup",
         element: <Signup />,
+      },
+      {
+        path: "/auth/logout",
+        element: <Logout />,
       },
     ],
   },

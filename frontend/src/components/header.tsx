@@ -14,7 +14,7 @@ export function Header() {
         </Link>
       </h1>
 
-      {!isLogin() && (
+      {!isLogin() ? (
         <>
           <Link
             to={`/auth/login`}
@@ -30,6 +30,13 @@ export function Header() {
             Signup
           </Link>
         </>
+      ) : (
+        <Link
+          to={`/auth/logout`}
+          className="text-2xl hover:bg-zinc-600 px-1 rounded-md transition-all"
+        >
+          Logout
+        </Link>
       )}
     </div>
   );
