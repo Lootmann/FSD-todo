@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Index as AuthIndex } from "./auths";
 import { Index } from ".";
-import { Login } from "./auths/Login";
+import { Login } from "./auths/login";
 import { Signup } from "./auths/signup";
 import "./styles/index.css";
 
