@@ -2,11 +2,12 @@ from datetime import datetime, timedelta
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError, jwt
+from jose import ExpiredSignatureError, JWTError, jwt
 from passlib.context import CryptContext
 from sqlmodel import Session
 
 from api.cruds import users as user_api
+from api.cruds.custom_exceptions import AuthException
 from api.db import get_db
 from api.models import auths as auth_model
 from api.models import users as user_model
@@ -42,16 +43,20 @@ def get_current_user(
         username: str = payload.get("sub", None)
 
         if username is None:
-            raise credential_exception
+            raise AuthException.raise401(detail="User Not Found")
 
         token = auth_model.Token(username=username)
+
+    except ExpiredSignatureError:
+        raise AuthException.raise401(detail="Token is Expired")
+
     except JWTError:
-        raise credential_exception
+        raise AuthException.raise401(detail="Invalid JWT token")
 
     user = user_api.find_by_name(db, token.username)
 
     if user is None:
-        raise credential_exception
+        raise AuthException.raise401(detail="User Not Found")
 
     return user
 
