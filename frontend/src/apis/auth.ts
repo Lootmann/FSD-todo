@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_BACKEND_URL } from "../settings";
+import { API_BACKEND_URL, LOCALSTORAGE_KEY } from "../settings";
 
 export function login(params: AuthUserType) {
   const { username, password } = params;
@@ -47,11 +47,17 @@ export function signup(params: AuthUserType) {
 }
 
 function setAuthToken(data: AuthTokenType) {
-  localStorage.setItem("todo-token", data.access_token);
+  if (data.access_token !== null)
+    localStorage.setItem(LOCALSTORAGE_KEY, data.access_token);
 }
 
-function getAuthToken(): AuthTokenType {
-  const token = localStorage.getItem("todo-token");
+export function getAuthToken(): AuthTokenType {
+  const token = localStorage.getItem(LOCALSTORAGE_KEY);
   if (token !== null) return { access_token: token, token_type: "bearer" };
-  return { access_token: "null", token_type: "null" };
+  else return { access_token: null, token_type: null };
+}
+
+export function isLogin(): boolean {
+  const token = localStorage.getItem(LOCALSTORAGE_KEY);
+  return token !== null;
 }

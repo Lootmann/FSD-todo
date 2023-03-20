@@ -1,4 +1,5 @@
 import React from "react";
+import { isLogin } from "../apis/auth";
 import { Link } from "react-router-dom";
 
 export function Header() {
@@ -13,19 +14,23 @@ export function Header() {
         </Link>
       </h1>
 
-      <Link
-        to={`/auth/login`}
-        className="text-2xl hover:bg-zinc-600 px-1 rounded-md transition-all"
-      >
-        Login
-      </Link>
+      {!isLogin() && (
+        <>
+          <Link
+            to={`/auth/login`}
+            className="text-2xl hover:bg-zinc-600 px-1 rounded-md transition-all"
+          >
+            Login
+          </Link>
 
-      <Link
-        to={`/auth/signup`}
-        className="text-2xl hover:bg-zinc-600 px-1 rounded-md transition-all"
-      >
-        Signup
-      </Link>
+          <Link
+            to={`/auth/signup`}
+            className="text-2xl hover:bg-zinc-600 px-1 rounded-md transition-all"
+          >
+            Signup
+          </Link>
+        </>
+      )}
     </div>
   );
 }
