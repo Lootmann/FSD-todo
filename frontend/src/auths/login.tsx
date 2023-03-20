@@ -1,7 +1,8 @@
 import React from "react";
+import { login } from "../apis/auth";
+import { passwordRules, usernameRules } from "./validations";
 import { useForm } from "react-hook-form";
 
-// TODO: login form
 export function Login() {
   const {
     register,
@@ -11,35 +12,10 @@ export function Login() {
   } = useForm<AuthUserType>();
 
   const onSubmit = (data: AuthUserType) => {
-    console.log(data.username);
-    console.log(data.password);
+    login(data);
   };
 
-  const usernameRules = {
-    required: "This field is required",
-    minLength: {
-      value: 5,
-      message: "username must be at least 5 characters long.",
-    },
-    maxLength: {
-      value: 100,
-      message: "username must be less than 100 characters long.",
-    },
-  };
-
-  const passwordRules = {
-    required: "This field is required",
-    minLength: {
-      value: 8,
-      message: "username must be at least 5 characters long.",
-    },
-    maxLength: {
-      value: 100,
-      message: "username must be less than 100 characters long.",
-    },
-  };
-
-  console.log(watch("username"), watch("password"));
+  // console.log(watch("username"), watch("password"));
 
   return (
     <div className="w-1/2 ml-auto mr-auto">
