@@ -41,6 +41,9 @@ login-frontend:
 login-db:
 	docker exec -it $(DB_CONTAINER_NAME) psql -U postgres
 
+dumpdb:
+	docker exec -it postgres-db pg_dumpall -U postgres > ./db/dump.sql
+
 # tests
 test:
 	docker compose exec $(APP_BACKEND_NAME) python3.10 -m pytest -svv
