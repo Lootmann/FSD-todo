@@ -7,8 +7,16 @@ from api.models import tasks as task_model
 from api.models import users as user_model
 
 
-def get_all_tasks(db: Session, user_id: int) -> List[task_model.Task]:
-    stmt = select(task_model.Task).where(task_model.Task.user_id == user_id)
+def get_all_tasks(
+    db: Session, user_id: int, offset: int, limit: int, done: bool
+) -> List[task_model.Task]:
+    stmt = (
+        select(task_model.Task)
+        .where(task_model.Task.user_id == user_id)
+        .where(task_model.Task.is_done == done)
+        .offset(offset)
+        .limit(limit)
+    )
     return db.exec(stmt).all()
 
 

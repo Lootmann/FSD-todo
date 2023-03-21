@@ -64,6 +64,50 @@ class TestGetTask:
         resp = client.get(f"/tasks/{task_id}", headers=other_header)
         assert resp.status_code == status.HTTP_404_NOT_FOUND
 
+    def test_get_tasks_filtered_by_done_flag(
+        self, client: TestClient, session: Session, login_fixture
+    ):
+        user, headers = login_fixture
+
+        TaskFactory.create_many_tasks(
+            db=session, num_of_task=2, user_id=user.id, is_done=False
+        )
+        TaskFactory.create_many_tasks(
+            db=session, num_of_task=3, user_id=user.id, is_done=True
+        )
+
+        resp = client.get("/tasks", headers=headers)
+        data = resp.json()
+        assert len(data) == 2
+
+        resp = client.get("/tasks?done=True", headers=headers)
+        data = resp.json()
+        assert len(data) == 3
+
+    def test_get_tasks_query_params_limit_and_offset(
+        self, client: TestClient, session: Session, login_fixture
+    ):
+        user, headers = login_fixture
+        TaskFactory.create_many_tasks(db=session, num_of_task=150, user_id=user.id)
+
+        resp = client.get("/tasks", headers=headers)
+        data = resp.json()
+        assert len(data) == 100
+
+        resp = client.get("/tasks?limit=50", headers=headers)
+        data = resp.json()
+        assert len(data) == 50
+
+        resp = client.get("/tasks?offset=50&limit=50", headers=headers)
+        data = resp.json()
+        assert len(data) == 50
+
+        resp = client.get("/tasks?limit=200", headers=headers)
+        data = resp.json()
+        assert (
+            data["detail"][0]["msg"] == "ensure this value is less than or equal to 100"
+        )
+
 
 class TestPostTask:
     def test_create_task_with_empty(self, client: TestClient, login_fixture):

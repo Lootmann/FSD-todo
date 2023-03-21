@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Query, status
 from sqlmodel import Session
 
 from api.cruds import auths as auth_api
@@ -20,9 +20,12 @@ router = APIRouter(tags=["tasks"], prefix="/tasks")
 def get_all_tasks(
     *,
     db: Session = Depends(get_db),
+    offset: int = Query(default=0, gt=0),
+    limit: int = Query(default=100, gt=0, le=100),
+    done: bool = Query(default=False),
     current_user=Depends(auth_api.get_current_user),
 ):
-    return task_api.get_all_tasks(db, current_user.id)
+    return task_api.get_all_tasks(db, current_user.id, offset, limit, done)
 
 
 @router.get(

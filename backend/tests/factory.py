@@ -1,6 +1,7 @@
 from datetime import datetime
 from random import randint, sample
 from string import ascii_letters
+from typing import List
 
 from fastapi.testclient import TestClient
 from sqlmodel import Session
@@ -38,12 +39,14 @@ class TaskFactory:
         user_id: int,
         title: str = random_string(),
         description: str = random_string(),
+        is_done: bool = False,
     ) -> task_model.Task:
         task = task_model.Task()
         task.created_at = datetime.now()
         task.updated_at = datetime.now()
         task.title = title
         task.description = description
+        task.is_done = is_done
         task.user_id = user_id
 
         db.add(task)
@@ -51,6 +54,25 @@ class TaskFactory:
         db.refresh(task)
 
         return task
+
+    @staticmethod
+    def create_many_tasks(
+        *, db: Session, num_of_task: int = 10, user_id: int, is_done: bool = False
+    ) -> List[task_model.Task]:
+        tasks = []
+        for _ in range(num_of_task):
+            task = task_model.Task()
+            task.created_at = datetime.now()
+            task.updated_at = datetime.now()
+            task.title = random_string()
+            task.description = random_string()
+            task.is_done = is_done
+            task.user_id = user_id
+            db.add(task)
+            db.commit()
+            db.refresh(task)
+            tasks.append(task)
+        return tasks
 
 
 class AuthFactory:
