@@ -4,7 +4,6 @@ import { API_BACKEND_URL } from "../settings";
 import { getAuthToken } from "../apis/auth";
 import { useForm } from "react-hook-form";
 
-// TODO: add task, modal
 export function AddTask({ handleRefresh, handleModal }: AddTaskProp) {
   const {
     register,
@@ -55,35 +54,46 @@ export function AddTask({ handleRefresh, handleModal }: AddTaskProp) {
               {...register("comment")}
               className="text-2xl bg-zinc-800 px-1 rounded-md outline-none"
             />
-
-            <select
-              className="text-2xl bg-zinc-800 px-1 rounded-md outline-none"
-              {...register("priority")}
-              defaultValue="3"
-            >
-              <option value="0">High Priority</option>
-              <option value="1">Middle Priority</option>
-              <option value="2">Low Priority</option>
-              <option value="3">No Priority</option>
-            </select>
           </div>
 
-          <div className="flex gap-6 justify-end mx-10">
-            <button
-              type="button"
-              className="bg-zinc-850 px-2 rounded-md"
-              onClick={() => handleModal(false)}
-            >
-              Cancel
-            </button>
+          <footer className="flex justify-between">
+            <div>
+              <label
+                htmlFor="priority"
+                className="text-2xl bg-zinc-800 px-2 py-1 rounded-l-md"
+              >
+                Priority
+              </label>
+              <select
+                id="priority"
+                className="text-2xl bg-zinc-800 px-1 py-1 rounded-r-md outline-none"
+                {...register("priority")}
+                defaultValue="3"
+              >
+                <option value="0">🔴 High</option>
+                <option value="1">🟠 Mid</option>
+                <option value="2">🔵 Low</option>
+                <option value="3">⚪ No</option>
+              </select>
+            </div>
 
-            <button
-              type="submit"
-              className="bg-rose-900 hover:bg-rose-700 px-2 rounded-md"
-            >
-              Add Task
-            </button>
-          </div>
+            <div className="flex gap-6">
+              <button
+                type="button"
+                className="bg-zinc-850 px-2 rounded-md"
+                onClick={() => handleModal(false)}
+              >
+                Cancel
+              </button>
+
+              <button
+                type="submit"
+                className="bg-rose-900 hover:bg-rose-700 px-2 rounded-md"
+              >
+                Add Task
+              </button>
+            </div>
+          </footer>
         </form>
       </div>
     </div>
