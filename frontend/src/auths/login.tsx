@@ -19,12 +19,23 @@ export function Login() {
       console.log(resp);
       // redirect to /tasks
       window.location.href = "/tasks";
-    } else if (resp.response.status == 404) {
-      console.log(resp);
-      setError("username", { type: "custom", message: "User is Not Found D:" });
-      setError("password", { type: "custom", message: "User is Not Found D:" });
+      return;
+    }
+
+    // user not found error
+    if (resp.response.status == 404) {
+      console.error(resp.response);
+      setError("username", {
+        type: "custom",
+        message: "Invalid Username or password",
+      });
+      setError("password", {
+        type: "custom",
+        message: "Invalid Username or password",
+      });
     } else {
-      console.log(resp);
+      // server error
+      console.error(resp.response);
       setError("username", {
         type: "custom",
         message: "Invalid Username or Password",

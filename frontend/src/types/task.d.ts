@@ -1,7 +1,8 @@
 type TaskType = {
   id: number;
   user_id: number;
-  comment: string;
+  title: string;
+  description: string;
   priority: number;
   created_at: Date;
   updated_at: Date;
@@ -10,7 +11,8 @@ type TaskType = {
 };
 
 type TaskCreateType = {
-  comment: string;
+  title: string;
+  description: string;
   priority: number;
   // TODO: create_task - expired_at: Date;
 };
@@ -22,4 +24,5 @@ type AddTaskProp = {
 
 type AllTaskProp = {
   tasks: TaskType[];
+  handleRefresh: () => void;
 };

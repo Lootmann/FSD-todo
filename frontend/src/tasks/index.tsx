@@ -58,7 +58,9 @@ export function Index() {
           <h2 className="border-b border-zinc-600">Today</h2>
 
           <ul className="my-2">
-            {tasks.length > 0 && <AllTasks tasks={tasks} />}
+            {tasks.length > 0 && (
+              <AllTasks tasks={tasks} handleRefresh={handleRefresh} />
+            )}
 
             <li className="mt-4 pt-1">
               {openModal ? (

@@ -12,17 +12,18 @@ export function AddTask({ handleRefresh, handleModal }: AddTaskProp) {
     formState: { errors },
   } = useForm<TaskCreateType>();
 
-  console.log(watch("comment"), watch("priority"));
+  // console.log(watch("title"), watch("description"), watch("priority"));
 
   function onSubmit(data: TaskCreateType) {
     const token = getAuthToken();
-    console.log(data.comment, data.priority, token);
+    console.log(data.title, data.priority, token);
 
     axios
       .post(
         API_BACKEND_URL + "/tasks",
         {
-          comment: data.comment,
+          title: data.title,
+          description: data.description,
           priority: data.priority,
         },
         { headers: { Authorization: `Bearer ${token.access_token}` } }
@@ -50,8 +51,14 @@ export function AddTask({ handleRefresh, handleModal }: AddTaskProp) {
         >
           <div className="grow flex flex-col gap-4 outline-none">
             <input
-              placeholder="comment"
-              {...register("comment")}
+              placeholder="title"
+              {...register("title")}
+              className="text-2xl bg-zinc-800 px-1 rounded-md outline-none"
+            />
+
+            <input
+              placeholder="description"
+              {...register("description")}
               className="text-2xl bg-zinc-800 px-1 rounded-md outline-none"
             />
           </div>
