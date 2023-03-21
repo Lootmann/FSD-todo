@@ -1,7 +1,6 @@
 import React from "react";
 import { login } from "../apis/auth";
 import { passwordRules, usernameRules } from "./validations";
-import { redirect } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 export function Login() {

@@ -37,7 +37,7 @@ export function Index() {
         })
         .catch((error) => {
           // NOTE: see https://github.com/Lootmann/FSD-todo/issues/1
-          console.log(error);
+          console.error(error);
           removeAuthToken();
           window.location.href = "/auth/login";
         });
@@ -60,8 +60,7 @@ export function Index() {
           <ul className="my-2">
             {tasks.length > 0 && <AllTasks tasks={tasks} />}
 
-            <li className="mt-8 pt-1 border-t border-zinc-600">
-              {/* TODO: Add Task */}
+            <li className="mt-4 pt-1">
               {openModal ? (
                 <AddTask
                   handleRefresh={handleRefresh}
