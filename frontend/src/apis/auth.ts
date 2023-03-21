@@ -1,29 +1,24 @@
 import axios from "axios";
 import { API_BACKEND_URL, LOCALSTORAGE_KEY } from "../settings";
 
-export function login(params: AuthUserType) {
+export async function login(params: AuthUserType) {
   const { username, password } = params;
 
-  axios
+  return await axios
     .post(
       API_BACKEND_URL + "/auth/token",
       { username: username, password: password },
       { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
     )
     .then((resp) => {
-      console.log(resp);
-      console.log(resp.data);
-
       if (resp.status == 200) {
         const auth_token: AuthTokenType = resp.data;
         setAuthToken(auth_token);
-
-        // NOTE: redirect to '/' top page
-        window.location.href = "/tasks";
       }
+      return resp;
     })
     .catch((error) => {
-      console.log(error);
+      return error;
     });
 }
 

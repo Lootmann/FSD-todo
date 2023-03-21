@@ -16,7 +16,6 @@ export function AddTask({ handleRefresh, handleModal }: AddTaskProp) {
   console.log(watch("comment"), watch("priority"));
 
   function onSubmit(data: TaskCreateType) {
-    // TODO: create new task with axios
     const token = getAuthToken();
     console.log(data.comment, data.priority, token);
 
@@ -30,12 +29,17 @@ export function AddTask({ handleRefresh, handleModal }: AddTaskProp) {
         { headers: { Authorization: `Bearer ${token.access_token}` } }
       )
       .then((resp) => {
-        console.log(resp);
-        console.log(resp.data);
-      });
+        if (resp.status == 201) {
+          console.log(resp);
+          console.log(resp.data);
 
-    handleModal(false);
-    handleRefresh();
+          handleModal(false);
+          handleRefresh();
+        } else {
+          // TODO: can't create task by server error D:
+          // TODO: show error message
+        }
+      });
   }
 
   return (

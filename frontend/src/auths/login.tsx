@@ -10,10 +10,31 @@ export function Login() {
     handleSubmit,
     watch,
     formState: { errors },
+    setError,
   } = useForm<AuthUserType>();
 
-  const onSubmit = (data: AuthUserType) => {
-    login(data);
+  const onSubmit = async (data: AuthUserType) => {
+    const resp = await login(data);
+
+    if (resp.status == 200) {
+      console.log(resp);
+      // redirect to /tasks
+      window.location.href = "/tasks";
+    } else if (resp.response.status == 404) {
+      console.log(resp);
+      setError("username", { type: "custom", message: "User is Not Found D:" });
+      setError("password", { type: "custom", message: "User is Not Found D:" });
+    } else {
+      console.log(resp);
+      setError("username", {
+        type: "custom",
+        message: "Invalid Username or Password",
+      });
+      setError("password", {
+        type: "custom",
+        message: "Invalid Username or Password",
+      });
+    }
   };
 
   // console.log(watch("username"), watch("password"));
