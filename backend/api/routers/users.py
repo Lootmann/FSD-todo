@@ -24,6 +24,19 @@ def get_all_users(
     return user_api.get_all_users(db)
 
 
+@router.get(
+    "/me",
+    response_model=user_model.UserRead,
+    status_code=status.HTTP_200_OK,
+)
+def get_login_user(
+    *,
+    _: Session = Depends(get_db),
+    current_user=Depends(auth_api.get_current_user),
+):
+    return current_user
+
+
 @router.post(
     "",
     response_model=user_model.UserRead,
