@@ -8,7 +8,8 @@ if TYPE_CHECKING:
 
 
 class TaskBase(SQLModel):
-    comment: str = Field(default="")
+    title: str = Field(default="")
+    description: str = Field(default="")
     priority: int = Field(default=0, ge=0, le=3)
     created_at: date = Field(default=date.today())
     updated_at: date = Field(default=date.today())
@@ -32,6 +33,7 @@ class TaskRead(TaskBase):
 
 
 class TaskUpdate(TaskBase):
+    title: Optional[str] = None
     comment: Optional[str] = None
     priority: Optional[int] = Field(default=None, ge=0, le=3)
     expired_at: Optional[date] = None

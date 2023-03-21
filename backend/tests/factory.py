@@ -34,12 +34,16 @@ class UserFactory:
 class TaskFactory:
     @staticmethod
     def create_task(
-        db: Session, user_id: int, comment: str = random_string()
+        db: Session,
+        user_id: int,
+        title: str = random_string(),
+        description: str = random_string(),
     ) -> task_model.Task:
         task = task_model.Task()
         task.created_at = datetime.now()
         task.updated_at = datetime.now()
-        task.comment = comment
+        task.title = title
+        task.description = description
         task.user_id = user_id
 
         db.add(task)

@@ -24,7 +24,11 @@ class TestGetTask:
         user, headers = login_fixture
 
         # create task
-        resp = client.post("/tasks", json={"comment": "first task"}, headers=headers)
+        resp = client.post(
+            "/tasks",
+            json={"title": "first task", "description": "hello"},
+            headers=headers,
+        )
         task_id = resp.json()["id"]
 
         # get task by id
@@ -33,7 +37,8 @@ class TestGetTask:
 
         assert resp.status_code == status.HTTP_200_OK
         assert data["id"] == task_id
-        assert data["comment"] == "first task"
+        assert data["title"] == "first task"
+        assert data["description"] == "hello"
 
     def test_get_task_with_wrong_task_id(self, client: TestClient, login_fixture):
         user, headers = login_fixture
@@ -45,7 +50,11 @@ class TestGetTask:
         self, client: TestClient, session: Session, login_fixture
     ):
         user, headers = login_fixture
-        resp = client.post("/tasks", json={"comment": "first task"}, headers=headers)
+        resp = client.post(
+            "/tasks",
+            json={"title": "first task", "description": "hello world"},
+            headers=headers,
+        )
         task_id = resp.json()["id"]
 
         UserFactory.create_user(session, username="other", password="hogehoge123")
@@ -65,18 +74,20 @@ class TestPostTask:
 
         assert resp.status_code == status.HTTP_201_CREATED
         assert data["id"] is not None
-        assert data["comment"] == ""
+        assert data["title"] == ""
+        assert data["description"] == ""
         assert data["priority"] == 0
         assert data["is_done"] is False
         assert data["expired_at"] is None
 
-    def test_create_task_with_comment(self, client: TestClient, login_fixture):
+    def test_create_task_with_field(self, client: TestClient, login_fixture):
         user, headers = login_fixture
 
         resp = client.post(
             "/tasks",
             json={
-                "comment": "well hello friends :^)",
+                "title": "well hello friends :^)",
+                "description": "how are you?",
                 "expired_at": str(date.today() + timedelta(days=10)),
             },
             headers=headers,
@@ -86,6 +97,8 @@ class TestPostTask:
         assert resp.status_code == status.HTTP_201_CREATED
         assert data["id"] is not None
         assert data["expired_at"] is not None
+        assert data["title"] == "well hello friends :^)"
+        assert data["description"] == "how are you?"
 
     def test_done_task(self, client: TestClient, session: Session, login_fixture):
         user, headers = login_fixture
@@ -145,7 +158,8 @@ class TestPatchTask:
         resp = client.patch(
             f"/tasks/{task.id}",
             json={
-                "comment": "updated :^)",
+                "title": "updated :^)",
+                "description": "updated :^)",
                 "priority": 3,
                 "expired_at": str(date.today() + timedelta(days=10)),
             },
@@ -154,7 +168,8 @@ class TestPatchTask:
         data = resp.json()
 
         assert resp.status_code == status.HTTP_200_OK
-        assert data["comment"] == "updated :^)"
+        assert data["title"] == "updated :^)"
+        assert data["description"] == "updated :^)"
         assert data["priority"] == 3
         assert "expired_at" in data
         assert data["expired_at"] is not None
