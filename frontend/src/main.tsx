@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { AuthIndex } from "./auths";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Index as AuthIndex } from "./auths";
 import { Index as TaskIndex } from "./tasks";
 import { Index } from ".";
 import { Login } from "./auths/login";

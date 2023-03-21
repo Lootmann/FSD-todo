@@ -59,7 +59,16 @@ export function getAuthToken(): AuthTokenType {
   else return { access_token: null, token_type: null };
 }
 
-export function isLogin(): boolean {
-  const token = localStorage.getItem(LOCALSTORAGE_KEY);
-  return token !== null;
+export async function isLoggedIn(): Promise<boolean> {
+  const token = getAuthToken();
+  if (token.access_token == null) return false;
+
+  return await axios
+    .get(API_BACKEND_URL + "/users/me", {
+      headers: { Authorization: `Bearer ${token.access_token}` },
+    })
+    .then((resp) => {
+      if (resp.status == 200) return true;
+      else return false;
+    });
 }

@@ -1,9 +1,23 @@
 import { Header } from "./components/header";
+import { isLoggedIn, removeAuthToken } from "./apis/auth";
 import { Outlet } from "react-router-dom";
 import { Sidebar } from "./components/sidebar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function Index() {
+  // TODO: when you are not logged in or expired JWT token, redirect to login page
+  useEffect(() => {
+    const checkLogin = async () => {
+      const isLogged = await isLoggedIn();
+      if (!isLogged) {
+        removeAuthToken();
+        window.location.href = "/auth/login";
+      }
+    };
+
+    checkLogin();
+  }, []);
+
   return (
     <div className="h-screen flex flex-col bg-zinc-900 text-slate-200 text-xl">
       <Header />

@@ -1,8 +1,8 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
 import { API_BACKEND_URL } from "../settings";
-import { getAuthToken, isLogin } from "../apis/auth";
+import { getAuthToken } from "../apis/auth";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export function Header() {
   const [currentUser, setCurrentUser] = useState<CurrentUserType>({
@@ -20,11 +20,11 @@ export function Header() {
         if (resp.status == 200) {
           setCurrentUser(resp.data);
         } else {
-          // TODO: redirect
+          console.warn(resp.data);
         }
       })
       .catch((error) => {
-        // TODO: redirect
+        console.error(error);
       });
   }, []);
 
@@ -39,34 +39,14 @@ export function Header() {
         </Link>
       </h1>
 
-      {!isLogin() ? (
-        <>
-          <Link
-            to={`/auth/login`}
-            className="text-2xl hover:bg-zinc-600 px-1 rounded-md transition-all"
-          >
-            Login
-          </Link>
+      <Link
+        to={`/auth/logout`}
+        className="text-2xl hover:bg-zinc-600 px-1 rounded-md transition-all"
+      >
+        Logout
+      </Link>
 
-          <Link
-            to={`/auth/signup`}
-            className="text-2xl hover:bg-zinc-600 px-1 rounded-md transition-all"
-          >
-            Signup
-          </Link>
-        </>
-      ) : (
-        <>
-          <Link
-            to={`/auth/logout`}
-            className="text-2xl hover:bg-zinc-600 px-1 rounded-md transition-all"
-          >
-            Logout
-          </Link>
-
-          <p className="bg-zinc-600 px-2 rounded-md">{currentUser.username}</p>
-        </>
-      )}
+      <p className="bg-zinc-600 px-2 rounded-md">{currentUser.username}</p>
     </div>
   );
 }
