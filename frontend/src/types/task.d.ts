@@ -19,3 +19,7 @@ type AddTaskProp = {
   handleRefresh: () => void;
   handleModal: (boolean) => void;
 };
+
+type AllTaskProp = {
+  tasks: TaskType[];
+};

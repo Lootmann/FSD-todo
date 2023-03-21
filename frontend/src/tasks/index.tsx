@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { AddTask } from "./addtask";
+import { AllTasks } from "./alltask";
 import { API_BACKEND_URL } from "../settings";
 import { getAuthToken, removeAuthToken } from "../apis/auth";
 
@@ -57,15 +58,9 @@ export function Index() {
           <h2 className="border-b border-zinc-600">Today</h2>
 
           <ul className="my-2">
-            {tasks.map((task) => {
-              return (
-                <li key={task.id}>
-                  {task.id}. {task.comment}({task.priority})
-                </li>
-              );
-            })}
+            {tasks.length > 0 && <AllTasks tasks={tasks} />}
 
-            <li className="mt-8 pt-1 rounded-md border-t border-zinc-600">
+            <li className="mt-8 pt-1 border-t border-zinc-600">
               {/* TODO: Add Task */}
               {openModal ? (
                 <AddTask
@@ -73,7 +68,7 @@ export function Index() {
                   handleModal={handleModal}
                 />
               ) : (
-                <p onClick={() => setOpenModal(true)}>+ add new task</p>
+                <span onClick={() => setOpenModal(true)}>+ add new task</span>
               )}
             </li>
           </ul>
