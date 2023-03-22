@@ -14,7 +14,7 @@ export function Index() {
     setRefresh(!refresh);
   }
 
-  // TODO: show loading animation while fetching data
+  // for loading animation
   const [isLoading, setIsLoading] = useState(true);
 
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -37,6 +37,7 @@ export function Index() {
             console.log(resp);
             console.log(resp.data);
             setTasks(resp.data);
+            // for loading animation
             setIsLoading(false);
           }
         })
@@ -47,7 +48,7 @@ export function Index() {
           window.location.href = "/auth/login";
         });
     } else {
-      // NOTE: when token is null, this means that user at least is not logged in.
+      // when token is null, this means that user at least is not logged in.
       window.location.href = "/auth/login";
     }
   }, [refresh]);
