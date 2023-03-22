@@ -39,7 +39,7 @@ login-frontend:
 	docker exec -it $(APP_FRONTEND_NAME) /bin/bash
 
 login-db:
-	docker exec -it $(DB_CONTAINER_NAME) psql -U postgres
+	docker exec -it postgres-db psql -U postgres
 
 dumpdb:
 	docker exec -it postgres-db pg_dumpall -U postgres > ./db/dump.sql
