@@ -59,7 +59,7 @@ export function Index() {
         {!isLoading && (
           <>
             <div className="my-6 fade-in">
-              <h2 className="pb-2 border-b border-zinc-600">Today</h2>
+              <h2 className="pb-2 border-b border-zinc-600">Your Tasks</h2>
 
               <ul className="my-2 transition-all">
                 <AllTasks tasks={tasks} handleRefresh={handleRefresh} />
