@@ -1,11 +1,17 @@
 import { Header } from "./components/header";
 import { isLoggedIn, removeAuthToken } from "./apis/auth";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { Sidebar } from "./components/sidebar";
 import { useEffect, useState } from "react";
 
 export function Index() {
-  // TODO: when you are not logged in or expired JWT token, redirect to login page
+  // NOTE: when user is '/', redirect to '/tasks/
+  const location = useLocation();
+  if (location.pathname == "/") {
+    window.location.href = "/tasks";
+  }
+
+  // NOTE: when you are not logged in or expired JWT token, redirect to login page
   useEffect(() => {
     const checkLogin = async () => {
       const isLogged = await isLoggedIn();
