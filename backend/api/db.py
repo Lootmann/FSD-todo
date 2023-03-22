@@ -27,3 +27,22 @@ if __name__ == "__main__":
         user = User(username="toortoor", password=get_hashed_password("toortoor"))
         session.add(user)
         session.commit()
+        session.refresh(user)
+
+        task = Task(
+            title="first task",
+            description="this is a description",
+            priority=2,
+            user_id=user.id,
+        )
+        session.add(task)
+        session.commit()
+
+        task = Task(
+            title="second task",
+            description=":^)",
+            priority=0,
+            user_id=user.id,
+        )
+        session.add(task)
+        session.commit()
