@@ -56,14 +56,10 @@ export function Index() {
   return (
     <div className="flex-1 flex flex-col p-6">
       <div className="flex flex-col mx-72">
-        <div className="my-6">
-          <h2 className="border-b border-zinc-600">hello world</h2>
-        </div>
-
         {!isLoading && (
           <>
             <div className="my-6 fade-in">
-              <h2 className="border-b border-zinc-600">Today</h2>
+              <h2 className="pb-2 border-b border-zinc-600">Today</h2>
 
               <ul className="my-2 transition-all">
                 <AllTasks tasks={tasks} handleRefresh={handleRefresh} />
