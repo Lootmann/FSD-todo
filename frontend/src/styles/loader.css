@@ -1,0 +1,14 @@
+.fade-in {
+  animation: opacity-fadein 1s;
+  animation-duration: 1s;
+}
+
+@keyframes opacity-fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

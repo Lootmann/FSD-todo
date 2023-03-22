@@ -1,9 +1,10 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
 import { AddTask } from "./addtask";
 import { AllTasks } from "./alltask";
 import { API_BACKEND_URL } from "../settings";
 import { getAuthToken, removeAuthToken } from "../apis/auth";
+import { useEffect, useState } from "react";
+import "../styles/loader.css";
 
 export function Index() {
   const [tasks, setTasks] = useState<TaskType[]>([]);
@@ -12,6 +13,9 @@ export function Index() {
   function handleRefresh() {
     setRefresh(!refresh);
   }
+
+  // TODO: show loading animation while fetching data
+  const [isLoading, setIsLoading] = useState(true);
 
   const [openModal, setOpenModal] = useState<boolean>(false);
   function handleModal(isOpened: boolean) {
@@ -23,7 +27,7 @@ export function Index() {
 
     if (token.access_token != null) {
       axios
-        .get(API_BACKEND_URL + "/tasks", {
+        .get(API_BACKEND_URL + "/tasks?done=false", {
           headers: {
             Authorization: `Bearer ${token.access_token}`,
           },
@@ -33,6 +37,7 @@ export function Index() {
             console.log(resp);
             console.log(resp.data);
             setTasks(resp.data);
+            setIsLoading(false);
           }
         })
         .catch((error) => {
@@ -54,26 +59,30 @@ export function Index() {
           <h2 className="border-b border-zinc-600">hello world</h2>
         </div>
 
-        <div className="my-6">
-          <h2 className="border-b border-zinc-600">Today</h2>
+        {!isLoading && (
+          <>
+            <div className="my-6 fade-in">
+              <h2 className="border-b border-zinc-600">Today</h2>
 
-          <ul className="my-2">
-            {tasks.length > 0 && (
-              <AllTasks tasks={tasks} handleRefresh={handleRefresh} />
-            )}
+              <ul className="my-2 transition-all">
+                <AllTasks tasks={tasks} handleRefresh={handleRefresh} />
 
-            <li className="mt-4 pt-1">
-              {openModal ? (
-                <AddTask
-                  handleRefresh={handleRefresh}
-                  handleModal={handleModal}
-                />
-              ) : (
-                <span onClick={() => setOpenModal(true)}>+ add new task</span>
-              )}
-            </li>
-          </ul>
-        </div>
+                <li className="mt-4 pt-1">
+                  {openModal ? (
+                    <AddTask
+                      handleRefresh={handleRefresh}
+                      handleModal={handleModal}
+                    />
+                  ) : (
+                    <span onClick={() => setOpenModal(true)}>
+                      + add new task
+                    </span>
+                  )}
+                </li>
+              </ul>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
