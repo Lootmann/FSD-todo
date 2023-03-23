@@ -10,6 +10,7 @@ export function Task({ task, handleRefresh }: TaskProp) {
     e: React.MouseEvent<HTMLSpanElement, MouseEvent>,
     task_id: number
   ) {
+    e.stopPropagation();
     e.preventDefault();
     const token = getAuthToken();
 
@@ -44,7 +45,7 @@ export function Task({ task, handleRefresh }: TaskProp) {
     formState: { errors },
   } = useForm();
 
-  console.log(watch("title"), watch("description"));
+  // console.log(watch("title"), watch("description"));
 
   // TODO: function delete and update task
   function deleteTask(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {

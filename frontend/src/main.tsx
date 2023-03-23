@@ -8,6 +8,7 @@ import { loader as AllTasksLoader } from "./apis/task";
 import { Login } from "./auths/login";
 import { Logout } from "./auths/logout";
 import { Signup } from "./auths/signup";
+import { taskAction } from "./tasks/addtask";
 import "./styles/index.css";
 
 const router = createBrowserRouter([
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
         path: "/tasks",
         element: <TaskIndex />,
         loader: AllTasksLoader,
+        action: taskAction,
       },
     ],
   },

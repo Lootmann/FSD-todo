@@ -22,11 +22,6 @@ type AddTaskProp = {
   handleModal: (boolean) => void;
 };
 
-type AllTaskProp = {
-  tasks: TaskType[];
-  handleRefresh: () => void;
-};
-
 // TODO: rename this
 // TODO: show task detail Modal
 type TaskProp = {

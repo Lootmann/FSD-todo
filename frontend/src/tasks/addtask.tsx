@@ -1,65 +1,35 @@
 import axios from "axios";
 import React from "react";
 import { API_BACKEND_URL } from "../settings";
+import { Form, redirect, useActionData } from "react-router-dom";
 import { getAuthToken } from "../apis/auth";
 import { useForm } from "react-hook-form";
 
 export function AddTask({ handleRefresh, handleModal }: AddTaskProp) {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<TaskCreateType>();
-
-  // console.log(watch("title"), watch("description"), watch("priority"));
-
-  function onSubmit(data: TaskCreateType) {
-    const token = getAuthToken();
-    console.log(data.title, data.priority, token);
-
-    axios
-      .post(
-        API_BACKEND_URL + "/tasks",
-        {
-          title: data.title,
-          description: data.description,
-          priority: data.priority,
-        },
-        { headers: { Authorization: `Bearer ${token.access_token}` } }
-      )
-      .then((resp) => {
-        if (resp.status == 201) {
-          console.log(resp);
-          console.log(resp.data);
-
-          handleModal(false);
-          handleRefresh();
-        } else {
-          // TODO: can't create task by server error D:
-          // TODO: show error message
-        }
-      });
-  }
+  // TODO: react-router get ActionData
+  // const data = useActionData();
 
   return (
     <div className="relative w-full h-56 flex inset-0 bg-zinc-700 rounded-md">
       <div className="flex-1 flex flex-col m-4">
-        <form
+        <Form
+          method="post"
+          action="/tasks"
           className="grow flex flex-col outline-none"
-          onSubmit={handleSubmit(onSubmit)}
         >
           <div className="grow flex flex-col gap-4 outline-none">
             <input
               placeholder="title"
-              {...register("title")}
               className="text-2xl bg-zinc-800 px-1 rounded-md outline-none"
+              name="title"
+              id="title"
             />
 
             <input
               placeholder="description"
-              {...register("description")}
               className="text-2xl bg-zinc-800 px-1 rounded-md outline-none"
+              name="description"
+              id="description"
             />
           </div>
 
@@ -72,10 +42,10 @@ export function AddTask({ handleRefresh, handleModal }: AddTaskProp) {
                 Priority
               </label>
               <select
-                id="priority"
                 className="text-2xl bg-zinc-800 px-1 py-1 rounded-r-md outline-none"
-                {...register("priority")}
                 defaultValue="3"
+                name="priority"
+                id="priority"
               >
                 <option value="0">🔴 High</option>
                 <option value="1">🟠 Mid</option>
@@ -101,8 +71,36 @@ export function AddTask({ handleRefresh, handleModal }: AddTaskProp) {
               </button>
             </div>
           </footer>
-        </form>
+        </Form>
       </div>
     </div>
   );
+}
+
+export async function taskAction({ request }: any) {
+  const data = await request.formData();
+
+  const submitData = {
+    title: data.get("title"),
+    description: data.get("description"),
+    priority: data.get("priority"),
+  };
+
+  // NOTE: create new task
+  const token = getAuthToken();
+  axios
+    .post(API_BACKEND_URL + "/tasks", submitData, {
+      headers: { Authorization: `Bearer ${token.access_token}` },
+    })
+    .then((resp) => {
+      if (resp.status == 201) {
+        console.log(resp);
+        return redirect("/tasks");
+      } else {
+        // TODO: can't create task by server error D:
+        // TODO: return error message
+      }
+    });
+
+  return redirect("/tasks");
 }

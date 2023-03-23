@@ -7,7 +7,6 @@ export function TasksByLoader({
 }: {
   handleRefresh: () => void;
 }) {
-  console.log(">>> AllTasks");
   const tasks = useLoaderData() as TaskType[];
 
   return (
