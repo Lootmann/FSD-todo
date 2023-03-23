@@ -57,13 +57,16 @@ export function AddTask({ handleRefresh, handleModal }: AddTaskProp) {
             <input
               placeholder="title"
               {...register("title")}
-              className="text-2xl bg-zinc-800 px-1 rounded-md outline-none"
+              className="text-2xl bg-zinc-800 pl-3 rounded-md outline-none"
+              autoComplete="off"
+              autoFocus
             />
 
             <input
               placeholder="description"
               {...register("description")}
-              className="text-2xl bg-zinc-800 px-1 rounded-md outline-none"
+              className="text-2xl bg-zinc-800 pl-3 rounded-md outline-none"
+              autoComplete="off"
             />
           </div>
 

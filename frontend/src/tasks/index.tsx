@@ -54,33 +54,29 @@ export function Index() {
   }, [refresh]);
 
   return (
-    <div className="flex-1 flex flex-col p-6">
-      <div className="flex flex-col mx-72">
-        {!isLoading && (
-          <>
-            <div className="my-6 fade-in">
-              <h2 className="pb-2 border-b border-zinc-600">Your Tasks</h2>
+    <div className="h-full flex-1 flex flex-col items-center ml-[208px] pt-[50px]">
+      {!isLoading && (
+        <>
+          <div className="h-full w-1/2 ml-20 my-10 fade-in">
+            <h2 className="pb-2 border-b border-zinc-500">Your Tasks</h2>
 
-              <ul className="my-2 transition-all">
-                <AllTasks tasks={tasks} handleRefresh={handleRefresh} />
+            <ul className="my-2 transition-all pb-10">
+              <AllTasks tasks={tasks} handleRefresh={handleRefresh} />
 
-                <li className="mt-4 pt-1">
-                  {openModal ? (
-                    <AddTask
-                      handleRefresh={handleRefresh}
-                      handleModal={handleModal}
-                    />
-                  ) : (
-                    <span onClick={() => setOpenModal(true)}>
-                      + add new task
-                    </span>
-                  )}
-                </li>
-              </ul>
-            </div>
-          </>
-        )}
-      </div>
+              <li className="mt-4 pt-1">
+                {openModal ? (
+                  <AddTask
+                    handleRefresh={handleRefresh}
+                    handleModal={handleModal}
+                  />
+                ) : (
+                  <span onClick={() => setOpenModal(true)}>+ add new task</span>
+                )}
+              </li>
+            </ul>
+          </div>
+        </>
+      )}
     </div>
   );
 }

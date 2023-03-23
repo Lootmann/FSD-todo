@@ -25,10 +25,10 @@ export function Index() {
   }, []);
 
   return (
-    <div className="h-full flex flex-col bg-zinc-900 text-slate-200 text-xl">
+    <div className="h-full flex flex-col overflow-y-auto bg-zinc-900 text-slate-200 text-xl">
       <Header />
 
-      <div className="h-full flex border-blue-500 border">
+      <div className="h-full flex">
         <Sidebar />
         <Outlet />
       </div>
