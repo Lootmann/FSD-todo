@@ -28,7 +28,7 @@ export function Index() {
     <div className="h-full flex flex-col bg-zinc-900 text-slate-200 text-xl">
       <Header />
 
-      <div className="h-full flex">
+      <div className="h-full flex border-blue-500 border">
         <Sidebar />
         <Outlet />
       </div>

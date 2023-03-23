@@ -3,9 +3,8 @@ import { Link } from "react-router-dom";
 
 export function Sidebar() {
   return (
-    <div className="h-full w-52 flex flex-col bg-zinc-850 px-4 pt-4">
+    <div className="h-screen fixed top-0 left-0 w-52 flex flex-col bg-zinc-850 px-4 pt-20">
       <ul>
-        {/* TODO: show all tasks */}
         <li className="hover:bg-zinc-700 px-1 my-1 rounded-md">
           <Link to={`/tasks`}>Inbox</Link>
         </li>

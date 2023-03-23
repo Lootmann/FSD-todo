@@ -29,7 +29,7 @@ export function Header() {
   }, []);
 
   return (
-    <div className="flex gap-4 items-baseline bg-zinc-800 shadow-md px-6 py-1">
+    <div className="z-10 flex gap-4 items-baseline bg-zinc-800 shadow-md px-6 py-1">
       <h1 className="text-2xl mr-4">
         <Link
           to={`/tasks`}
