@@ -70,7 +70,10 @@ export function Task({ task, handleRefresh }: TaskProp) {
       >
         <span
           className="hover:scale-150 transition-all mr-3"
-          onClick={(e) => onSubmit(e, task.id)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onSubmit(e, task.id);
+          }}
         >
           {getPriorityMark(task.priority)}
         </span>
