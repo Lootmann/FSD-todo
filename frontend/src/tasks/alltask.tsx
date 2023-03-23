@@ -1,7 +1,15 @@
 import { Task } from "./task";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLoaderData } from "react-router-dom";
 
-export function AllTasks({ tasks, handleRefresh }: AllTaskProp) {
+export function TasksByLoader({
+  handleRefresh,
+}: {
+  handleRefresh: () => void;
+}) {
+  console.log(">>> AllTasks");
+  const tasks = useLoaderData() as TaskType[];
+
   return (
     <>
       {tasks.map((task) => {

@@ -4,6 +4,7 @@ import { AuthIndex } from "./auths";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Index as TaskIndex } from "./tasks";
 import { Index } from ".";
+import { loader as AllTasksLoader } from "./apis/task";
 import { Login } from "./auths/login";
 import { Logout } from "./auths/logout";
 import { Signup } from "./auths/signup";
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
       {
         path: "/tasks",
         element: <TaskIndex />,
+        loader: AllTasksLoader,
       },
     ],
   },
