@@ -10,6 +10,8 @@ export function AddTask({ handleRefresh, handleModal }: AddTaskProp) {
     handleSubmit,
     watch,
     formState: { errors },
+    setFocus,
+    reset,
   } = useForm<TaskCreateType>();
 
   // console.log(watch("title"), watch("description"), watch("priority"));
@@ -33,8 +35,10 @@ export function AddTask({ handleRefresh, handleModal }: AddTaskProp) {
           console.log(resp);
           console.log(resp.data);
 
-          handleModal(false);
           handleRefresh();
+          // TODO: clear form, and focus title input form
+          setFocus("title");
+          reset();
         } else {
           // TODO: can't create task by server error D:
           // TODO: show error message
