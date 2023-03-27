@@ -30,12 +30,6 @@ def verify_password(plain: str, hashed: str) -> bool:
 def get_current_user(
     db: Session = Depends(get_db), token: str = Depends(oath2_scheme)
 ) -> user_model.User:
-    credential_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"www-Authenticate": "Bearer"},
-    )
-
     try:
         payload = jwt.decode(
             token, credential.secret_key, algorithms=[credential.algorithm]
